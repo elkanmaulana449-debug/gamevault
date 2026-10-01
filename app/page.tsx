@@ -1,16 +1,20 @@
 import Navbar from "./components/Navbar";
 import prisma from "./lib/prisma";
+import ConfirmForm from "./components/ConfirmForm";
+import { hapusGame } from "./admin/action";
 
 export default async function Home() {
-  const games = await prisma.game.findMany();
+  const games = await prisma.game.findMany({
+    orderBy: {
+      id: "asc",
+    },
+  });
 
   return (
     <main className="flex min-h-screen flex-col bg-gray-100">
 
-      {/* Navbar */}
       <Navbar />
 
-      {/* Isi Halaman */}
       <div className="mx-auto w-full max-w-6xl flex-1 px-6 py-8">
 
         <h1 className="mb-2 text-3xl font-bold">
@@ -21,7 +25,6 @@ export default async function Home() {
           Daftar game yang saya punya
         </p>
 
-        {/* Tombol Tambah */}
         <a
           href="/admin/tambah"
           className="inline-block rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700"
@@ -29,80 +32,100 @@ export default async function Home() {
           Tambah Game
         </a>
 
-        {/* Tabel */}
-        <table className="mt-6 w-full bg-white shadow">
+        <div className="mt-6 overflow-x-auto rounded bg-white shadow">
 
-          <thead>
-            <tr className="bg-gray-200">
-              <th className="p-3">No</th>
-              <th className="p-3">Nama Game</th>
-              <th className="p-3">Genre</th>
-              <th className="p-3">Platform</th>
-              <th className="p-3">Rating</th>
-              <th className="p-3">Aksi</th>
-            </tr>
-          </thead>
+          <table className="w-full">
 
-          <tbody>
-            {games.map((game) => (
-              <tr
-                key={game.id}
-                className="border-b text-center"
-              >
-
-                <td className="p-3">
-                  {game.id}
-                </td>
-
-                <td className="p-3">
-                  {game.nama_game}
-                </td>
-
-                <td className="p-3">
-                  {game.genre}
-                </td>
-
-                <td className="p-3">
-                  {game.platform}
-                </td>
-
-                <td className="p-3">
-                  {game.rating}
-                </td>
-
-                <td className="p-3">
-
-                  <a
-                    href={`/edit/${game.id}`}
-                    className="mr-2 rounded bg-yellow-500 px-3 py-1 text-white hover:bg-yellow-600"
-                  >
-                    Edit
-                  </a>
-
-                  <button
-                    className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600"
-                  >
-                    Hapus
-                  </button>
-
-                </td>
-
+            <thead>
+              <tr className="bg-gray-200">
+                <th className="p-3">No</th>
+                <th className="p-3">Nama Game</th>
+                <th className="p-3">Genre</th>
+                <th className="p-3">Platform</th>
+                <th className="p-3">Rating</th>
+                <th className="p-3">Aksi</th>
               </tr>
-            ))}
-          </tbody>
+            </thead>
 
-        </table>
+            <tbody>
+              {games.map((game, index) => (
+                <tr
+                  key={game.id}
+                  className="border-b text-center"
+                >
 
-        {/* Kalau database masih kosong */}
-        {games.length === 0 && (
-          <p className="mt-6 text-center text-gray-500">
-            Belum ada game.
-          </p>
-        )}
+                  {/* Nomor tampilan */}
+                  <td className="p-3">
+                    {index + 1}
+                  </td>
+
+                  <td className="p-3">
+                    {game.nama_game}
+                  </td>
+
+                  <td className="p-3">
+                    {game.genre}
+                  </td>
+
+                  <td className="p-3">
+                    {game.platform}
+                  </td>
+
+                  <td className="p-3">
+                    {game.rating}
+                  </td>
+
+                  <td className="p-3">
+
+                    <div className="flex justify-center gap-2">
+
+                      {/* EDIT */}
+                      <a
+                        href={`/edit/${game.id}`}
+                        className="w-20 rounded bg-yellow-500 px-3 py-2 text-center text-white hover:bg-yellow-600"
+                      >
+                        Edit
+                      </a>
+
+                      {/* HAPUS */}
+                      <ConfirmForm
+                        action={hapusGame}
+                        message={`Yakin ingin menghapus ${game.nama_game}?`}
+                      >
+                        <input
+                          type="hidden"
+                          name="id"
+                          value={game.id}
+                        />
+
+                        <button
+                          type="submit"
+                          className="w-20 rounded bg-red-500 px-3 py-2 text-white hover:bg-red-600"
+                        >
+                          Hapus
+                        </button>
+                      </ConfirmForm>
+
+                    </div>
+
+                  </td>
+
+                </tr>
+              ))}
+            </tbody>
+
+          </table>
+
+          {games.length === 0 && (
+            <p className="p-6 text-center text-gray-500">
+              Belum ada game.
+            </p>
+          )}
+
+        </div>
 
       </div>
 
-      {/* Footer */}
       <footer className="bg-gray-900 py-5 text-center text-white">
         <p>
           © 2026 GameVault. Dibuat untuk tugas Pemrograman Web.

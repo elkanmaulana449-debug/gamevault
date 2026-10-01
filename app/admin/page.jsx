@@ -1,4 +1,5 @@
 import prisma from "../lib/prisma";
+import ConfirmForm from "../components/ConfirmForm";
 import { hapusGame } from "./action";
 
 export default async function AdminPage() {
@@ -43,14 +44,14 @@ export default async function AdminPage() {
             </thead>
 
             <tbody>
-              {games.map((game) => (
+              {games.map((game, index) => (
                 <tr
                   key={game.id}
                   className="border-b text-center"
                 >
                   <td className="p-3">
-                    {game.id}
-                  </td>
+                  {index + 1}
+                 </td>
 
                   <td className="p-3">
                     {game.nama_game}
@@ -69,33 +70,35 @@ export default async function AdminPage() {
                   </td>
 
                   <td className="p-3">
+                      <div className="flex items-center justify-center gap-2">
 
-                    <a
-  href={`/admin/edit/${game.id}`}
-  className="mr-2 rounded bg-yellow-500 px-3 py-1 text-white hover:bg-yellow-600"
->
-  Edit
-</a>
+                        <a
+                          href={`/edit/${game.id}`}
+                          className="rounded bg-yellow-500 px-3 py-1 text-white hover:bg-yellow-600"
+                        >
+                          Edit
+                        </a>
 
-                    <form
-                      action={hapusGame}
-                      className="inline"
-                    >
-                      <input
-                        type="hidden"
-                        name="id"
-                        value={game.id}
-                      />
+                        <ConfirmForm
+                          action={hapusGame}
+                          message={`Yakin ingin menghapus ${game.nama_game}?`}
+                        >
+                          <input
+                            type="hidden"
+                            name="id"
+                            value={game.id}
+                          />
 
-                      <button
-                        type="submit"
-                        className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600"
-                      >
-                        Hapus
-                      </button>
-                    </form>
+                          <button
+                            type="submit"
+                            className="rounded bg-red-500 px-3 py-1 text-white hover:bg-red-600"
+                          >
+                            Hapus
+                          </button>
+                        </ConfirmForm>
 
-                  </td>
+                      </div>
+                    </td>
                 </tr>
               ))}
             </tbody>

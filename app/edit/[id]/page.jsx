@@ -1,4 +1,5 @@
 import prisma from "../../lib/prisma";
+import ConfirmForm from "../../components/ConfirmForm";
 import { editGame } from "../../admin/action";
 import { notFound } from "next/navigation";
 
@@ -28,10 +29,11 @@ export default async function EditGame({ params }) {
           Ubah data game yang sudah tersimpan.
         </p>
 
-        <form
-          action={editGame}
-          className="rounded bg-white p-6 shadow"
-        >
+              <ConfirmForm
+              action={editGame}
+              message="Yakin ingin menyimpan perubahan game ini?"
+              className="rounded bg-white p-6 shadow"
+            >
 
           {/* ID game */}
           <input
@@ -106,7 +108,7 @@ export default async function EditGame({ params }) {
             Simpan Perubahan
           </button>
 
-        </form>
+        </ConfirmForm>
 
         <a
           href="/admin"

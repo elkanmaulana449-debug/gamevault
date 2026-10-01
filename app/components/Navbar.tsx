@@ -20,7 +20,7 @@ export default function Navbar() {
           </a>
 
           <a
-            href="/tambah"
+            href="/admin/tambah"
             className="hover:text-gray-300"
           >
             Tambah Game

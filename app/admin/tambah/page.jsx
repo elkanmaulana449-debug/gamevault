@@ -1,3 +1,4 @@
+import ConfirmForm from "../../components/ConfirmForm";
 import { tambahGame } from "../action";
 
 export default function TambahGame() {
@@ -14,10 +15,11 @@ export default function TambahGame() {
           Tambahkan game baru ke koleksi.
         </p>
 
-        <form
-          action={tambahGame}
-          className="rounded bg-white p-6 shadow"
-        >
+                  <ConfirmForm
+            action={tambahGame}
+            message="Yakin ingin menambahkan game ini?"
+            className="rounded bg-white p-6 shadow"
+          >
 
           <label className="block font-medium">
             Nama Game
@@ -77,7 +79,7 @@ export default function TambahGame() {
             Simpan
           </button>
 
-        </form>
+        </ConfirmForm>
 
       </div>
 
